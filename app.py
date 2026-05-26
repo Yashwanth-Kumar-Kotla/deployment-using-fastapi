@@ -1,6 +1,6 @@
 from fastapi import FastAPI
 from fastapi.responses import JSONResponse
-from pydantic import BaseModel, Field, computed_field
+from pydantic import BaseModel, Field, computed_field, field_validator
 from typing import Annotated, Literal
 import pickle
 import pandas as pd
@@ -31,6 +31,15 @@ class UserInput(BaseModel):
     city: Annotated[str, Field(..., description='The city that the user belongs to')]
     occupation: Annotated[Literal['retired', 'freelancer', 'student', 'government_job',
        'business_owner', 'unemployed', 'private_job'], Field(..., description='Occupation of the user')]
+    
+    @field_validator('city')
+    @classmethod
+    def city_validation(cls, v: str) -> str:
+        v = v.strip().title()
+        return v
+
+
+
     
     @computed_field
     @property
@@ -83,3 +92,14 @@ def predict_premium(data : UserInput):
     result = model.predict(input_df)[0]
 
     return JSONResponse(status_code = 200, content= {'predicted_category' : result})
+
+@app.get("/")
+def home():
+    return {"Insurance Category Predictor API"}
+
+@app.get("/health")
+def health_check():
+    return {
+        "status" : "OK",
+        "API Running " : "Yes"
+    }
