@@ -8,6 +8,9 @@ import pandas as pd
 with open("model.pkl", "rb") as f:
     model = pickle.load(f)
 
+#can use MLFlow
+MODEL_VERSION = "1.0.0"
+
 app = FastAPI()
 
 tier_1_cities = ["Mumbai", "Delhi", "Bangalore", "Chennai", "Kolkata", "Hyderabad", "Pune"]
@@ -101,5 +104,6 @@ def home():
 def health_check():
     return {
         "status" : "OK",
-        "API Running " : "Yes"
+        "API Running " : "Yes",
+        "Version" : MODEL_VERSION
     }
