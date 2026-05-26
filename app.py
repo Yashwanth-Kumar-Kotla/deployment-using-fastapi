@@ -105,5 +105,6 @@ def health_check():
     return {
         "status" : "OK",
         "API Running " : "Yes",
-        "Version" : MODEL_VERSION
+        "Version" : MODEL_VERSION,
+        "model_loaded" : model is not None
     }
